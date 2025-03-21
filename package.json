@@ -1,8 +1,12 @@
 {
-  "name": "my-module",
+  "name": "nuxt-http",
   "version": "1.0.0",
-  "description": "My new Nuxt module",
-  "repository": "your-org/my-module",
+  "description": "Nuxt api helper module",
+  "author": "Sebastian Sulinski <seb@sulinski.me>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sebastiansulinski/nuxt-http.git"
+  },
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -19,17 +23,22 @@
   ],
   "scripts": {
     "prepack": "nuxt-module-build build",
+    "prepare": "nuxt-module-build prepare",
     "dev": "nuxi dev playground",
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
-    "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
+    "release": "npm run lint && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest watch",
-    "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
+    "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit",
+    "link": "npm link",
+    "semantic-release": "semantic-release"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.16.0"
+    "@nuxt/kit": "^3.16.0",
+    "defu": "^6.1.4",
+    "semantic-release": "^24.2.3"
   },
   "devDependencies": {
     "@nuxt/devtools": "^2.2.1",
@@ -44,5 +53,8 @@
     "typescript": "~5.8.2",
     "vitest": "^3.0.8",
     "vue-tsc": "^2.2.8"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
