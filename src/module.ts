@@ -53,12 +53,12 @@ export default defineNuxtModule<ModuleOptions>({
 
     addRouteMiddleware({
       name: moduleOptions.middlewareNames.auth,
-      path: resolver.resolve('./runtime/middleware/auth'),
+      path: resolver.resolve('./runtime/middleware/auth.custom'),
     })
 
     addRouteMiddleware({
       name: moduleOptions.middlewareNames.guest,
-      path: resolver.resolve('./runtime/middleware/guest'),
+      path: resolver.resolve('./runtime/middleware/guest.custom'),
     })
   },
 })
