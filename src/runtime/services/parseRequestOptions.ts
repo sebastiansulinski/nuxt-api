@@ -1,9 +1,9 @@
-import { type FetchContext, type FetchOptions } from 'ofetch'
+import type { FetchContext, FetchOptions } from 'ofetch'
 import { useApiOptions } from '../composables/useApiOptions'
 import type { ModuleOptions } from '../types/ModuleOptions'
+import { useErrorBag } from '../composables/useErrorBag'
 import { useCookie, useRequestHeaders, useRequestURL } from '#app'
-import type {CookieRef} from "#app/composables/cookie";
-import {useErrorBag} from "../composables/useErrorBag";
+import type { CookieRef } from '#app/composables/cookie'
 
 /**
  * Get credentials.
@@ -29,10 +29,6 @@ const fetchCsrfCookie = async (
   }
 }
 
-const cookieToken = <T = string>(config: ModuleOptions): Readonly<CookieRef<T>> => {
-  return useCookie(config.csrf.cookieName, { readonly: true })
-}
-
 /**
  * Attach the CSRF header to the request.
  */
@@ -40,11 +36,11 @@ const attachCsrfHeader = async (
   headers: HeadersInit | undefined,
   config: ModuleOptions,
 ): Promise<HeadersInit> => {
-  let token = cookieToken(config)
+  let token = useCookie(config.csrf.cookieName, { readonly: true })
 
   if (!token.value) {
     await fetchCsrfCookie(config)
-    token = cookieToken(config)
+    token = useCookie(config.csrf.cookieName, { readonly: true })
   }
 
   if (!token.value) {
