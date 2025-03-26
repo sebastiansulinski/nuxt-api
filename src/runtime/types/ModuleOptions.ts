@@ -89,12 +89,6 @@ export interface ModuleOptions {
     login: string | false
 
     /**
-     * Redirect path for unauthenticated users.
-     * Throws a 403 error if set to false.
-     */
-    guest: string | false
-
-    /**
      * Redirect path after a successful login.
      * No redirection if set to false.
      */

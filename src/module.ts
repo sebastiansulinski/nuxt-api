@@ -26,8 +26,7 @@ export default defineNuxtModule<ModuleOptions>({
     redirect: {
       intendedEnabled: false,
       login: '/login',
-      guest: '/',
-      postLogin: '/',
+      postLogin: '/dashboard',
       postLogout: '/login',
     },
     middlewareNames: {
