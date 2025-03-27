@@ -9,7 +9,13 @@ export default defineNuxtModule<ModuleOptions>({
     configKey: MODULE_CONFIG_KEY,
   },
   defaults: {
+    authMode: 'cookie',
     userStateKey: 'user',
+    token: {
+      storageKey: 'AUTH_TOKEN',
+      storageType: 'cookie',
+      responseKey: 'token',
+    },
     fetchOptions: {
       retryAttempts: false,
     },

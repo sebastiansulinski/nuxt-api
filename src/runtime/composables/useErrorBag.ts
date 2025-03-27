@@ -1,6 +1,6 @@
 import { type Ref, ref } from 'vue'
 import type { ErrorBagInterface, Errors, FormValidationError, ResponseError } from '../types/Http'
-import {useCurrentUser} from "./useCurrentUser";
+import { useCurrentUser } from './useCurrentUser'
 
 export const useErrorBag = (): ErrorBagInterface => {
   const message: Ref<string | null> = ref(null)
@@ -24,10 +24,10 @@ export const useErrorBag = (): ErrorBagInterface => {
         break
       case 419:
         csrf(error)
-        break;
+        break
       case 401:
         unauthenticated()
-        break;
+        break
       default:
         general(error)
         break
@@ -60,12 +60,14 @@ export const useErrorBag = (): ErrorBagInterface => {
     errors.value = null
   }
 
-  const handle = (error?: ResponseError): void => {
+  const handle = (error?: ResponseError | unknown): void => {
     if (!error) {
       return
     }
 
-    if (error?.response?.status) {
+    const { response } = error as ResponseError
+
+    if (response?.status) {
       byStatusCode(error)
     }
     else {

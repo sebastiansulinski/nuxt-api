@@ -1,3 +1,6 @@
+type AuthMode = 'cookie' | 'token'
+type TokenStorageType = 'cookie' | 'localStorage'
+
 export interface ModuleOptions {
   /**
    * The base URL of the API server.
@@ -12,6 +15,11 @@ export interface ModuleOptions {
   originUrl?: string
 
   /**
+   * The authentication mode.
+   */
+  authMode: AuthMode
+
+  /**
    * The key to use to store the authenticated user in the `useState` variable.
    */
   userStateKey: string
@@ -22,6 +30,28 @@ export interface ModuleOptions {
    * Example usage: for response `{ user: { ... } }` it would be `user`
    */
   userResponseKey?: null | string
+
+  /**
+   * The token specific options.
+   */
+  token: {
+    /**
+     * The key to store the token in the storage.
+     */
+    storageKey: string
+
+    /**
+     * The storage type to use for the token.
+     */
+    storageType: TokenStorageType
+
+    /**
+     * Defines the key used to extract user data from the `endpoints.login` API response.
+     *
+     * Example usage: for response `{ auth_token: { ... } }` it would be `auth_token`
+     */
+    responseKey: string
+  }
 
   /**
    * Fetch options.

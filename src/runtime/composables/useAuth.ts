@@ -5,6 +5,8 @@ import { useHttp } from '../composables/useHttp'
 import { useApiOptions } from '../composables/useApiOptions'
 import { useCurrentUser } from '../composables/useCurrentUser'
 import { getAuthUser } from '../services/getAuthUser'
+import extractNestedValue from '../helpers/extractNestedValue'
+import { useTokenStorage } from './useTokenStorage'
 import { navigateTo, useRoute } from '#app'
 
 export const useAuth = <T>(): Auth<T> => {
@@ -31,7 +33,7 @@ export const useAuth = <T>(): Auth<T> => {
     clientOptions: FetchOptions = {},
     callback?: (responseData: LoginApiResponse, user: T | null) => unknown,
   ) => {
-    const { redirect, endpoints } = options
+    const { redirect, authMode, endpoints } = options
     const currentRoute = useRoute()
 
     if (isLoggedIn.value) {
@@ -50,6 +52,16 @@ export const useAuth = <T>(): Auth<T> => {
       credentials,
       clientOptions as object,
     )
+
+    if (authMode === 'token') {
+      const { token } = options
+      const tokenValue = extractNestedValue<string>(
+        response,
+        token.responseKey,
+      )
+
+      await useTokenStorage().set(tokenValue)
+    }
 
     await refreshUser()
 
@@ -74,7 +86,7 @@ export const useAuth = <T>(): Auth<T> => {
     return navigateTo(redirect.postLogin)
   }
 
-  const logout = async (callback?: () => undefined): Promise<void> => {
+  const logout = async (callback?: () => unknown): Promise<unknown> => {
     if (!isLoggedIn.value) {
       return
     }

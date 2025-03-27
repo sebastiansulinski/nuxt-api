@@ -2,8 +2,8 @@ import type { FetchContext, FetchOptions } from 'ofetch'
 import { useApiOptions } from '../composables/useApiOptions'
 import type { ModuleOptions } from '../types/ModuleOptions'
 import { useErrorBag } from '../composables/useErrorBag'
-import { useCookie, useRequestHeaders, useRequestURL } from '#app'
-import type { CookieRef } from '#app/composables/cookie'
+import { useTokenStorage } from '../composables/useTokenStorage'
+import { useCookie, useNuxtApp, useRequestHeaders, useRequestURL } from '#app'
 
 /**
  * Get credentials.
@@ -36,14 +36,14 @@ const attachCsrfHeader = async (
   headers: HeadersInit | undefined,
   config: ModuleOptions,
 ): Promise<HeadersInit> => {
-  let token = useCookie(config.csrf.cookieName, { readonly: true })
+  let csrfToken = useCookie(config.csrf.cookieName, { readonly: true })
 
-  if (!token.value) {
+  if (!csrfToken.value) {
     await fetchCsrfCookie(config)
-    token = useCookie(config.csrf.cookieName, { readonly: true })
+    csrfToken = useCookie(config.csrf.cookieName, { readonly: true })
   }
 
-  if (!token.value) {
+  if (!csrfToken.value) {
     console.warn(
       `Unable to set ${config.csrf.headerName} header`,
     )
@@ -52,7 +52,7 @@ const attachCsrfHeader = async (
 
   return {
     ...headers,
-    [config.csrf.headerName]: token.value,
+    [config.csrf.headerName]: csrfToken.value,
   }
 }
 
@@ -76,9 +76,28 @@ const attachServerHeaders = (
 }
 
 /**
- * Generate request payload.
+ * Obtain and attach the authentication token to the request headers.
  */
-const generateRequestPayload = async (
+const attachToken = async (
+  headers: HeadersInit,
+): Promise<HeadersInit> => {
+  const token = await useTokenStorage().get()
+
+  if (!token) {
+    console.debug('Authentication token is not set in the storage')
+    return headers
+  }
+
+  return {
+    ...headers,
+    Authorization: `Bearer ${token}`,
+  }
+}
+
+/**
+ * Prepare request context.
+ */
+const prepareContext = async (
   context: FetchContext,
   config: ModuleOptions,
 ): Promise<void> => {
@@ -96,20 +115,29 @@ const generateRequestPayload = async (
     context.options.body.append('_method', method.toUpperCase())
   }
 
-  if (import.meta.server) {
-    context.options.headers = new Headers(
-      attachServerHeaders(
-        Object.fromEntries(context.options.headers.entries()),
-        config,
-      ),
-    )
-  }
+  if (config.authMode === 'cookie') {
+    if (import.meta.server) {
+      context.options.headers = new Headers(
+        attachServerHeaders(
+          Object.fromEntries(context.options.headers.entries()),
+          config,
+        ),
+      )
+    }
 
-  if (['post', 'delete', 'put', 'patch'].includes(method)) {
+    if (['post', 'delete', 'put', 'patch'].includes(method)) {
+      context.options.headers = new Headers(
+        await attachCsrfHeader(
+          Object.fromEntries(context.options.headers.entries()),
+          config,
+        ),
+      )
+    }
+  }
+  else if (config.authMode === 'token') {
     context.options.headers = new Headers(
-      await attachCsrfHeader(
+      await attachToken(
         Object.fromEntries(context.options.headers.entries()),
-        config,
       ),
     )
   }
@@ -140,7 +168,7 @@ export default (options?: FetchOptions): FetchOptions => {
         }
       }
 
-      await generateRequestPayload(context, config)
+      await prepareContext(context, config)
     },
 
     onResponseError: async (context): Promise<void> => {
