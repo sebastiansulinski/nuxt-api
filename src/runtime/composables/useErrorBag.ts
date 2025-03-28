@@ -6,7 +6,7 @@ export const useErrorBag = (): ErrorBagInterface => {
   const message: Ref<string | null> = ref(null)
   const errors: Ref<Errors | null> = ref(null)
 
-  const get = <T = false>(key: string, defaultValue: T): string | T => {
+  const get = (key: string, defaultValue: unknown = false): string | unknown => {
     const payload = errors.value?.[key]
     return payload
       ? payload[0]
