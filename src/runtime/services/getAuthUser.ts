@@ -1,6 +1,6 @@
 import { useApiOptions } from '../composables/useApiOptions'
 import { useApiFetch } from '../composables/useApiFetch'
-import extractNestedValue from '~/src/runtime/helpers/extractNestedValue'
+import extractNestedValue from '../helpers/extractNestedValue'
 
 export async function getAuthUser<T = string>(): Promise<T | null> {
   const options = useApiOptions()
