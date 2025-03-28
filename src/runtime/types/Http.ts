@@ -33,7 +33,7 @@ export interface ErrorBagInterface {
   handle: (error?: ResponseError | unknown) => void
   reset: () => void
   has: (key: string) => boolean
-  get: (key: string) => string | null
+  get: <T = false>(key: string, defaultValue: T) => string | T
 }
 
 export interface FormValidationError {
