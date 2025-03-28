@@ -1,11 +1,11 @@
 {
-  "name": "@xsprtd/nuxt-http",
+  "name": "@xsprtd/nuxt-api",
   "version": "1.0.0",
-  "description": "Nuxt api helper module",
+  "description": "Nuxt API Authentication and Http Client",
   "author": "Sebastian Sulinski <seb@sulinski.me>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xsprtd/nuxt-http.git"
+    "url": "git+https://github.com/xsprtd/nuxt-api.git"
   },
   "license": "MIT",
   "type": "module",
