@@ -3,6 +3,21 @@
   "version": "1.0.0",
   "description": "Nuxt API Authentication and Http Client",
   "author": "Sebastian Sulinski <seb@sulinski.me>",
+  "keywords": [
+    "auth",
+    "laravel",
+    "sanctum",
+    "sanctum-authentication",
+    "laravel-sanctum-authentication",
+    "nuxt-authentication",
+    "http-client",
+    "fetch-client",
+    "nuxt-http-client",
+    "nuxt-api-client",
+    "authentication",
+    "token-api-authentication",
+    "cookie-api-authentication"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/xsprtd/nuxt-api.git"
