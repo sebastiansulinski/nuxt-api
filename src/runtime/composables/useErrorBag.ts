@@ -6,11 +6,11 @@ export const useErrorBag = (): ErrorBagInterface => {
   const message: Ref<string | null> = ref(null)
   const errors: Ref<Errors | null> = ref(null)
 
-  const get = (key: string, defaultValue: unknown = false): string | unknown => {
+  const get = <T = false>(key: string, defaultValue?: T): string | T => {
     const payload = errors.value?.[key]
     return payload
       ? payload[0]
-      : defaultValue
+      : <T>defaultValue
   }
 
   const has = (key: string): boolean => {
