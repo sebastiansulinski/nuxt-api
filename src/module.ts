@@ -9,6 +9,7 @@ export default defineNuxtModule<ModuleOptions>({
     configKey: MODULE_CONFIG_KEY,
   },
   defaults: {
+    apiBaseURL: process.env.API_BASE_URL,
     authMode: 'cookie',
     userStateKey: 'user',
     token: {
@@ -38,6 +39,11 @@ export default defineNuxtModule<ModuleOptions>({
     middlewareNames: {
       auth: 'auth',
       guest: 'guest',
+    },
+    errorMessages: {
+      default: 'Whoops - something went wrong',
+      csrf: 'CSRF token mismatch',
+      unauthenticated: 'Unauthenticated',
     },
   },
   async setup(options, nuxt) {
