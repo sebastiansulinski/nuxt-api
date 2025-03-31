@@ -142,4 +142,21 @@ export interface ModuleOptions {
      */
     guest: string
   }
+
+  errorMessages: {
+    /**
+     * A default error message.
+     */
+    default: 'Whoops - something went wrong.'
+
+    /**
+     * Error message to display when csrf token isn't valid.
+     */
+    csrf: 'CSRF token mismatch'
+
+    /**
+     * Error message to display when user is not-authenticated.
+     */
+    unauthenticated: 'Unauthenticated'
+  }
 }

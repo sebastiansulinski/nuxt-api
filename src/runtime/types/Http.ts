@@ -30,7 +30,7 @@ export interface Errors {
 export interface ErrorBagInterface {
   message: Ref<string | null>
   errors: Ref<Errors | null>
-  handle: (error?: ResponseError | unknown) => void
+  handle: (error?: Error) => void
   reset: () => void
   has: (key: string) => boolean
   get: <T = false>(key: string, defaultValue?: T) => string | T
@@ -41,7 +41,7 @@ export interface FormValidationError {
   errors: Errors | null
 }
 
-export interface ResponseError {
+export interface ResponseError extends Error {
   response?: {
     status?: number
     _data?: FormValidationError
