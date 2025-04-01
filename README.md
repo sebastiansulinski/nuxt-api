@@ -466,7 +466,6 @@ import type { Reactive } from "vue";
 
 const { 
   post, 
-  processing, 
   errorBag: { 
     message, 
     get: errorFor, 
@@ -544,3 +543,6 @@ const submit = async () => {
 }
 </script>
 ```
+## License
+
+This module is licensed under the [MIT license](https://opensource.org/license/MIT).
